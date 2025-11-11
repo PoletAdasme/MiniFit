@@ -1,0 +1,185 @@
+<app-header-bar></app-header-bar>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="md-grid">
+
+    <div [formGroup]="form" (ngSubmit)="actualizar()">
+
+      <!-- Encabezado -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Editar comida</ion-card-title>
+          <ion-card-subtitle *ngIf="comidaId">ID #{{ comidaId }}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-row class="md-filtros ion-align-items-end">
+            <ion-col size="12" sizeMd="3">
+              <ion-item>
+                <ion-label>Fecha</ion-label>
+                <ion-input type="date" formControlName="fecha"></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col size="12" sizeMd="3">
+              <ion-item>
+                <ion-label>Tipo</ion-label>
+                <ion-select formControlName="idTipoComida" interface="popover" placeholder="Seleccione">
+                  <ion-select-option *ngFor="let t of tipos" [value]="t.idTipoComida">
+                    {{ t.nombre }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Buscar producto -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Buscar producto</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-row class="md-filtros ion-align-items-end">
+            <ion-col size="9">
+              <ion-item>
+                <ion-label position="stacked">Producto</ion-label>
+                <ion-input formControlName="termino" placeholder="Ej: yogurt natural 0%"></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col size="3" class="ion-text-right">
+              <ion-button expand="block" (click)="buscar()" [disabled]="buscando">Buscar</ion-button>
+            </ion-col>
+          </ion-row>
+
+         <!-- Resultado / Loader -->
+<ng-container *ngIf="!buscando; else loadingTpl">
+
+  <!-- Resultados (scroll máx 6 filas) -->
+  <ion-list *ngIf="resultados.length; else noResultados" class="resultados-scroll">
+    <ion-item class="result-item" *ngFor="let r of resultados">
+      <ion-label>
+        <h3>
+          {{ r.nombre }}
+          <small *ngIf="r.marca">— {{ r.marca }}</small>
+        </h3>
+        <p>
+          kcal: {{ r.kcal ?? 0 }}
+          • P: {{ r.proteina_g ?? 0 }} g
+          • C: {{ r.carbohidrato_g ?? 0 }} g
+          • G: {{ r.grasa_g ?? 0 }} g
+          <span *ngIf="r.unidad"> • {{ r.unidad }}</span>
+        </p>
+      </ion-label>
+      <ion-button size="small" (click)="agregarDesdeBusqueda(r)">
+        Agregar
+      </ion-button>
+    </ion-item>
+
+    <!-- Paginación sticky dentro del scroll -->
+    <ion-item class="paginator" lines="none">
+      <ion-label>Página {{ page }}</ion-label>
+      <ion-button slot="end" fill="outline" (click)="prevPage()" [disabled]="page <= 1 || buscando">
+        Anterior
+      </ion-button>
+      <ion-button slot="end" fill="outline" (click)="nextPage()" [disabled]="!hasMore || buscando">
+        Siguiente
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #noResultados>
+    <div class="empty">No hay resultados aún.</div>
+  </ng-template>
+
+</ng-container>
+
+<!-- Loader + Skeletons -->
+<ng-template #loadingTpl>
+  <div class="loading-wrap">
+    <ion-spinner name="crescent"></ion-spinner>
+    <span>Buscando…</span>
+  </div>
+
+  <!-- Skeleton list (6 filas) -->
+  <ion-list class="resultados-scroll">
+    <ion-item *ngFor="let i of [1,2,3,4,5,6]">
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+      <ion-button size="small" disabled>
+        <ion-skeleton-text [animated]="true" style="width: 56px; height: 18px; border-radius: 8px;"></ion-skeleton-text>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+</ng-template>
+
+
+          <ng-template #noResultados>
+            <div class="empty">Busca un producto para agregarlo.</div>
+          </ng-template>
+        </ion-card-content>
+      </ion-card>
+
+      <!-- Ítems seleccionados -->
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>Ítems de la comida</ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list *ngIf="itemsForm.length; else noItems" class="items-scroll">
+            <ion-item class="item-fixed" *ngFor="let g of itemsForm.controls; let i = index" [formGroup]="g">
+              <ion-label>
+                <h3 class="ion-text-wrap">{{ g.get('nombre')?.value }}</h3>
+                <div class="mini-grid readonly">
+                  <div class="ro-cell"><strong>Cantidad:</strong> 1</div>
+                  <div class="ro-cell" *ngIf="g.get('unidad')?.value">
+                    <strong>Unidad:</strong> {{ g.get('unidad')?.value }}
+                  </div>
+                  <div class="ro-cell"><strong>Kcal:</strong> {{ g.get('kcal')?.value || 0 }}</div>
+                  <div class="ro-cell"><strong>Prot (g):</strong> {{ g.get('proteina')?.value || 0 }}</div>
+                  <div class="ro-cell"><strong>Carb (g):</strong> {{ g.get('carbohidrato')?.value || 0 }}</div>
+                  <div class="ro-cell"><strong>Grasa (g):</strong> {{ g.get('grasa')?.value || 0 }}</div>
+                </div>
+              </ion-label>
+
+              <ion-button fill="clear" color="danger" slot="end" (click)="quitarItem(i)">Quitar</ion-button>
+            </ion-item>
+          </ion-list>
+
+          <ng-template #noItems>
+            <div class="empty">Esta comida no tiene ítems aún.</div>
+          </ng-template>
+
+          <!-- Totales -->
+          <div class="totals" *ngIf="itemsForm.length">
+            <div><strong>Total Kcal:</strong> {{ totalKcal | number:'1.0-0' }}</div>
+            <div><strong>Proteína:</strong> {{ totalP | number:'1.0-1' }} g</div>
+            <div><strong>Carbohidrato:</strong> {{ totalC | number:'1.0-1' }} g</div>
+            <div><strong>Grasa:</strong> {{ totalG | number:'1.0-1' }} g</div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="ion-margin-top">
+            <ion-button type="submit" expand="block" (click)="actualizar()" [disabled]="guardando">
+              {{ guardando ? 'Actualizando…' : 'Actualizar' }}
+            </ion-button>
+            <ion-button expand="block" fill="outline" color="medium" (click)="cancelar()" [disabled]="guardando">
+              Cancelar
+            </ion-button>
+          </div>
+        </ion-card-content>
+      </ion-card>
+
+    </div>
+
+  </ion-grid>
+</ion-content>

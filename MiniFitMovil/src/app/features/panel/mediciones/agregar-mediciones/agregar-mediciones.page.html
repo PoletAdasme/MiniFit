@@ -1,0 +1,72 @@
+
+<app-header-bar></app-header-bar> 
+<ion-content [fullscreen]="true" class="bg">
+  <ion-card>
+    <div class="wrapper">
+        <h1 class="title">Agregar Mediciones</h1>
+          <ion-card-content>
+           <form [formGroup]="form" (ngSubmit)="guardar()">
+                  <ion-list lines="none">
+
+                    <!-- Fecha -->
+                    <ion-item>
+                      <ion-label position="stacked">Fecha</ion-label>
+                      <ion-input type="date" formControlName="fecha"></ion-input>
+                    </ion-item>
+                    <ion-text color="danger" *ngIf="f['fecha']?.touched && f['fecha']?.invalid">
+                      <small>La fecha es obligatoria.</small>
+                    </ion-text>
+
+                    <!-- Peso -->
+                    <ion-item class="ion-margin-top">
+                      <ion-label position="stacked">Peso (kg)</ion-label>
+                      <ion-input
+                        type="number"
+                        inputmode="decimal"
+                        step="0.1"
+                        min="1" max="300"
+                        formControlName="pesoKg">
+                      </ion-input>
+                    </ion-item>
+                    <ion-text color="danger" *ngIf="f['pesoKg']?.touched && f['pesoKg']?.invalid">
+                      <small>Peso entre 1 y 300 kg.</small>
+                    </ion-text>
+
+                    <!-- Estatura -->
+                    <ion-item class="ion-margin-top">
+                      <ion-label position="stacked">Estatura (cm)</ion-label>
+                      <ion-input
+                        type="number"
+                        inputmode="numeric"
+                        min="30" max="250"
+                        formControlName="estaturaCm">
+                      </ion-input>
+                    </ion-item>
+                    <ion-text color="danger" *ngIf="f['estaturaCm']?.touched && f['estaturaCm']?.invalid">
+                      <small>Estatura entre 30 y 250 cm.</small>
+                    </ion-text>
+
+                    <!-- Vista previa del IMC (no se envía) -->
+                    <ion-item class="ion-margin-top" *ngIf="imcPreview as imc">
+                      <ion-label>IMC (estimado):</ion-label>
+                      <ion-chip>
+                        <ion-label>{{ imc }}</ion-label>
+                      </ion-chip>
+                    </ion-item>
+
+                  </ion-list>
+
+                  <div class="ion-margin-top">
+                    <ion-button type="submit" expand="block" [disabled]="guardando"> Guardar
+                      {{ guardando ? 'Guardando…' : 'Guardar' }}
+                    </ion-button>
+              <ion-button expand="block" fill="outline" color="medium"
+                                (click)="cancelar()" [disabled]="guardando">
+                      Cancelar
+            </ion-button>      
+          </div>
+        </form>     
+      </ion-card-content>
+    </div>
+  </ion-card>
+</ion-content>

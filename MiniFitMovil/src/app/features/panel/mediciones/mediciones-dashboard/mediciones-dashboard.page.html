@@ -1,0 +1,144 @@
+<app-header-bar></app-header-bar> 
+
+<ion-content [fullscreen]="true"> 
+  <ion-grid class="md-grid">
+
+     <!-- Filtros de búsqueda -->
+    <ion-card >
+      <ion-card-header>
+            <ion-card-title>Filtros de busqueda</ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        <ion-row class="md-filtros ion-align-items-end">
+        <ion-col size="12" sizeMd="3">
+          <ion-item>
+            <ion-label position="stacked">Desde</ion-label>
+            <ion-input type="date" [max]="todayIso" [(ngModel)]="desdeISO"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="12" sizeMd="3">
+          <ion-item>
+            <ion-label position="stacked">Hasta</ion-label>
+            <ion-input type="date" [max]="todayIso" [(ngModel)]="hastaISO"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="12" sizeMd="3">
+          <ion-item>
+            <ion-label position="stacked">Vista</ion-label>
+            <ion-select interface="popover" [(ngModel)]="vista">
+              <ion-select-option value="semanal">Semanal</ion-select-option>
+              <ion-select-option value="mensual">Mensual</ion-select-option>
+              <ion-select-option value="anual">Anual</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+
+        <ion-col size="12" sizeMd="3" class="md-filtros-acciones">
+          <ion-button expand="block" fill="outline" (click)="limpiarFiltros()">
+            Limpiar
+          </ion-button>
+          <ion-button expand="block" (click)="aplicarFiltros()">
+            Aplicar
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      </ion-card-content>
+    </ion-card>
+    
+
+     <swiper-container
+      slides-per-view="1"
+      space-between="12"
+      pagination="true"
+      navigation="true"
+      style="--swiper-pagination-color:#666; --swiper-navigation-color:#666;"> 
+      <swiper-slide>
+        <!-- Gráfico 1: Peso vs Fecha (línea) -->
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Peso vs Fecha</ion-card-title>
+            <ion-card-subtitle>kg por día</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas id="chartPeso"></canvas>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Distribución por IMC</ion-card-title>
+            <ion-card-subtitle>Categorías OMS</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <canvas id="chartIMC"></canvas>
+          </ion-card-content>
+        </ion-card>
+
+      </swiper-slide>
+
+      <swiper-slide>
+       <!-- Gráfico 3: Comparativa mensual (barras) -->
+        <ion-col size="12" sizeMd="6">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>Comparativa Mensual</ion-card-title>
+              <ion-card-subtitle>Promedio de Peso / Estatura / IMC</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <canvas id="chartComparativa"></canvas>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+
+      </swiper-slide>
+     </swiper-container>
+   
+
+
+  
+        
+    
+     
+ 
+    <!-- Historial -->
+   
+        <ion-card class="panel-card">
+          <ion-card-header>
+            <ion-card-title>Historial</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-button expand="block" class="btn-add" (click)="irAgregar()">Agregar medición</ion-button>
+
+            <!-- ⬇⬇⬇ Agrega este contenedor -->
+            <div class="historial-scroll">
+              <ng-container *ngFor="let m of mediciones; trackBy: trackById">
+                <!-- tu item del historial tal como lo tienes -->
+                <!-- ejemplo (no cambies tu estructura): -->
+                <ion-item class="hist-item" lines="none">
+                  
+                  <ion-label>
+                    <div><strong>{{ m.fecha | date:'dd-MM-yyy' }}</strong></div>
+                    <div>Peso: {{ m.pesoKg }} kg • Estatura: {{ m.estaturaCm }} cm • IMC: {{ m.imc | number:'1.1-1' }}</div>
+                  </ion-label>
+                  <ion-buttons slot="end">
+                    <ion-button fill="clear" (click)="irEditar(m.medicionId)">
+                      <img src="assets/icon/EditarIcono.png" class="action-icon" alt="Editar">
+                    </ion-button>
+                    <ion-button fill="clear" (click)="confirmarEliminar(m.medicionId)">
+                      <img src="assets/icon/EliminarIcono.png" class="action-icon" alt="Eliminar">
+                    </ion-button>
+                  </ion-buttons>
+                </ion-item>
+              </ng-container>
+            </div>
+            <!-- ⬆⬆⬆ -->
+          </ion-card-content>
+        </ion-card>   
+  </ion-grid>
+</ion-content>
