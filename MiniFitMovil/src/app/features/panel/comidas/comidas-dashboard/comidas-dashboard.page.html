@@ -1,0 +1,163 @@
+<app-header-bar></app-header-bar>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="md-grid">
+
+    <!-- ===== Filtros ===== -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Filtros de búsqueda</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-row class="md-filtros ion-align-items-end">
+
+          <ion-col size="12" sizeMd="3">
+            <ion-item>
+              <ion-label>Desde</ion-label>
+              <ion-input type="date" [max]="todayIso" [(ngModel)]="desdeISO"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" sizeMd="3">
+            <ion-item>
+              <ion-label>Hasta</ion-label>
+              <ion-input type="date" [max]="todayIso" [(ngModel)]="hastaISO"></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" sizeMd="3">
+            <ion-item>
+              <ion-label>Vista</ion-label>
+              <ion-select interface="popover"
+                          [(ngModel)]="vista"
+                          (ionChange)="onVistaChange()"
+                          [value]="vista">
+                <ion-select-option value="semanal">Semanal</ion-select-option>
+                <ion-select-option value="mensual">Mensual</ion-select-option>
+                <ion-select-option value="anual">Anual</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="12" sizeMd="3">
+            <ion-item>
+              <ion-label>Tipo de comida</ion-label>
+              <ion-select interface="popover"
+                          [(ngModel)]="idTipoComidaFiltro"
+                          [value]="idTipoComidaFiltro"
+                          placeholder="Todos">
+                <ion-select-option [value]="''">Todos</ion-select-option>
+                <ion-select-option *ngFor="let t of tipos" [value]="t.idTipoComida">
+                  {{ t.nombre }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12" sizeMd="6">
+            <ion-button expand="block" fill="outline" (click)="limpiarFiltros()">
+              Limpiar
+            </ion-button>
+          </ion-col>
+          <ion-col size="12" sizeMd="6">
+            <ion-button expand="block" (click)="aplicarFiltros()">
+              Aplicar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- ===== Gráficos en carrusel ===== -->
+<swiper-container
+  slides-per-view="1"
+  space-between="12"
+  pagination="true"
+  navigation="true"
+  style="--swiper-pagination-color:#666; --swiper-navigation-color:#666;"
+>
+  <swiper-slide>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Kcal por día</ion-card-title>
+        <ion-card-subtitle>Total diario</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="chart-wrap"><canvas id="chartLinea"></canvas></div>
+      </ion-card-content>
+    </ion-card>
+  </swiper-slide>
+
+  <swiper-slide>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Distribución de Kcal</ion-card-title>
+        <ion-card-subtitle>por tipo de comida</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="chart-wrap"><canvas id="chartTorta"></canvas></div>
+      </ion-card-content>
+    </ion-card>
+  </swiper-slide>
+
+  <swiper-slide>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Macros promedio por mes</ion-card-title>
+        <ion-card-subtitle>Proteína / Carbohidrato / Grasa</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="chart-wrap"><canvas id="chartBarras"></canvas></div>
+      </ion-card-content>
+    </ion-card>
+  </swiper-slide>
+</swiper-container>
+
+
+    <!-- ===== HISTORIAL ===== -->
+    <ion-card class="panel-card">
+      <ion-card-header>
+        <ion-card-subtitle>Agregar / Editar / Eliminar comidas</ion-card-subtitle>
+        <ion-card-title>Historial</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-button expand="block" color="success" (click)="irAgregar()">
+          Agregar comida
+        </ion-button>
+
+        <div class="historial-scroll">
+          <ion-list *ngIf="historial?.length; else sinHistorial">
+            <ion-item class="hist-item" *ngFor="let h of historial; trackBy: trackById">
+              <ion-label>
+                <div class="titulo">
+                  <strong>{{ h.tipoNombre }}</strong>
+                  <span>• {{ h.fecha | date:'dd-MM-yyyy' }}</span>
+                </div>
+                <div class="resumen">
+                  Items: {{ h.items }}
+                  • Kcal: {{ h.kcal | number:'1.0-0' }}
+                  • Prot: {{ h.proteina_g | number:'1.0-1' }} g
+                  • Carb: {{ h.carbohidrato_g | number:'1.0-1' }} g
+                  • Grasa: {{ h.grasa_g | number:'1.0-1' }} g
+                </div>
+              </ion-label>
+
+              <ion-button size="small" (click)="irEditar(h.comidaId)">Editar</ion-button>
+              <ion-button size="small" color="danger" (click)="confirmarEliminar(h.comidaId)">Eliminar</ion-button>
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <ng-template #sinHistorial>
+          <div class="empty">Sin comidas en el rango seleccionado.</div>
+        </ng-template>
+      </ion-card-content>
+    </ion-card>
+
+  </ion-grid>
+</ion-content>

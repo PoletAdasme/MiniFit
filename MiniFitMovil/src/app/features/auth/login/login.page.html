@@ -1,0 +1,57 @@
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="logo-wrap">
+    <img src="assets/img/logo.png" alt="MiniFit" class="logo" />
+    <!-- <h1 class="app-title">MiniFit</h1> -->
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+   <ion-item>
+    <ion-label position="stacked">RUT</ion-label>
+    <ion-input
+      formControlName="rut"
+      inputmode="text"
+      autocomplete="username"
+      placeholder="12.345.678-9"
+      (ionInput)="formatearRut($event)">
+    </ion-input>
+  </ion-item>
+  <ion-note color="danger" *ngIf="hasError('rut','required')">RUT obligatorio.</ion-note>
+
+    <ion-item class="mt-8">
+      <ion-label position="stacked">Contraseña</ion-label>
+      <ion-input
+        formControlName="password"
+        [type]="showPassword ? 'text' : 'password'"
+        autocomplete="current-password"
+        placeholder="Ingresa tu contraseña">
+      </ion-input>
+
+      <!-- Botón texto Ver/Ocultar -->
+      <ion-button
+        fill="clear"
+        slot="end"
+        size="small"
+        type="button"
+        class="toggle-btn"
+        (click)="togglePassword()">
+        {{ passwordToggleLabel }}
+      </ion-button>
+    </ion-item>
+
+    <ion-note color="danger" *ngIf="hasError('password','required')">Contraseña obligatoria.</ion-note>
+    <ion-note color="danger" *ngIf="hasError('password','minlength')">Mínimo 6 caracteres.</ion-note>
+    <ion-note color="danger" *ngIf="hasError('password','policy')">
+      Debe contener al menos <b>1 mayúscula</b> y <b>1 caracter especial</b>.
+    </ion-note>
+
+    <ion-button expand="block" class="mt-16" type="submit" [disabled]="loginForm.invalid || isSubmitting">
+      Ingresar
+    </ion-button>
+
+    <div class="create-wrap">
+      <button type="button" class="link-like" (click)="goCrearUsuario()">
+        ¿Quieres crear tu usuario?
+      </button>
+    </div>
+  </form>
+</ion-content>
