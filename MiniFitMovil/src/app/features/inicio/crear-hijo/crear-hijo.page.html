@@ -1,0 +1,72 @@
+<ion-content [fullscreen]="true" class="bg"> 
+  <ion-card>
+   
+    <div class="wrapper">
+       <h1 class="title">Crear Hijo</h1>
+      <form [formGroup]="form" (ngSubmit)="guardar()" >
+
+      <ion-item lines="none">
+        <ion-label position="stacked">RUT</ion-label>
+        <ion-input
+          formControlName="rutCompleto"
+          (ionInput)="onRutInput($event)"
+           (ionBlur)="onRutBlur()"
+          inputmode="text"
+          autocomplete="off"
+          placeholder="12.345.678-9">
+        </ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="hasError('rutCompleto','required')">Obligatorio.</ion-note>
+    <ion-note color="danger" *ngIf="hasError('rutCompleto','rutInvalido')">RUT inválido.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input formControlName="nombre" autocomplete="off" placeholder="Ingrese Nombre" ></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="hasError('nombre','required')">Obligatorio.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Apellido paterno</ion-label>
+        <ion-input formControlName="apellidoPaterno"  autocomplete="off" placeholder="Ingrese Apellido Paterno"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="hasError('apellidoPaterno','required')">Obligatorio.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Apellido materno</ion-label>
+        <ion-input formControlName="apellidoMaterno" placeholder="Ingresa apellido materno(Opcional)"></ion-input>
+      </ion-item>
+
+        <ion-item lines="none">
+        <ion-label position="stacked">Fecha de Nacimiento</ion-label>
+        
+          <ion-input type="date"  
+              [max]="todayIso" 
+              id="fechaNac"
+              formControlName="fechaNac"
+              presentation="date"
+              [max]="todayIso"
+              preferWheel="true"
+              autocomplete="off" >
+             
+          </ion-input>
+       </ion-item>
+
+       
+
+      <!-- Campo edad oculto: se calcula automáticamente -->
+      <input type="hidden" formControlName="edad" />
+
+      <ion-button
+        expand="block"
+        class="btn-primary"
+        (click)="guardar()"
+        [disabled]="guardando || form.invalid" >
+        Guardar
+      </ion-button>
+
+      
+
+    </form>
+    </div>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,70 @@
+<ion-content [fullscreen]="true" class="bg">
+  <div class="wrapper">
+    <h1 class="title">Crear cuenta</h1>
+
+    <form [formGroup]="form" (ngSubmit)="crear()" >
+      <ion-item lines="none">
+        <ion-label position="stacked">RUT</ion-label>
+        <ion-input
+          formControlName="rut"
+          inputmode="text"
+          autocomplete="off"
+          placeholder="12.345.678-9"
+          (ionInput)="onRutInput($event)">
+        </ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('rut','rutInvalido')">RUT inválido.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input formControlName="nombre" placeholder="Ingrese Nombre" autocomplete="off"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('nombre','required')">Obligatorio.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Apellido paterno</ion-label>
+        <ion-input formControlName="apPaterno" autocomplete="off" placeholder="Ingrese Apellido Paterno"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('apPaterno','required')">Obligatorio.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Apellido materno (opcional)</ion-label>
+        <ion-input formControlName="apMaterno" autocomplete="off" placeholder="Ingrese Apellido Materno (Opcional)"></ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Correo</ion-label>
+        <ion-input type="email" formControlName="correo" autocomplete="email" placeholder="correo@dominio.cl"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('correo','email')">Correo inválido.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input formControlName="telefono" inputmode="tel" placeholder="91234567 (8 numeros)" (ionInput)="onTelefonoInput($event)"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('telefono','minlength')">Mínimo 8 dígitos.</ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Contraseña</ion-label>
+        <ion-input type="password" formControlName="clave" autocomplete="new-password" placeholder="Mín. 6, mayúscula y símbolo"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="has('clave','passwordWeak')">
+        Debe tener al menos 6 caracteres, una mayúscula y un carácter especial.
+      </ion-note>
+
+      <ion-item lines="none">
+        <ion-label position="stacked">Confirmar contraseña</ion-label>
+        <ion-input type="password" formControlName="confirmar" autocomplete="new-password" placeholder="Repita contraseña" ></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="form.touched && form.hasError('nomatch')">Las contraseñas no coinciden.</ion-note>
+
+      <ion-button expand="block" class="btn-primary" type="submit" [disabled]="enviando || form.invalid">
+        {{ enviando ? 'Creando…' : 'Crear cuenta' }}
+      </ion-button>
+      <ion-button expand="block" fill="outline" (click)="cancelar()" [disabled]="enviando">
+        Cancelar
+      </ion-button>
+    </form>
+  </div>
+</ion-content>
+ 

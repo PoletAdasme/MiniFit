@@ -1,0 +1,125 @@
+<app-header-bar></app-header-bar> 
+<ion-content [fullscreen]="true" class="bg">
+  <div class="wrapper">
+   <h1 class="title">Bienvenido</h1>
+    <ion-card>
+    
+
+      <ng-container *ngIf="hijoActivo; else sinSeleccion">
+        <div class="logo-wrap">
+            <img src="assets/img/logo.png" alt="MiniFit"  class="logo" />
+          </div>
+        <div class="welcome">
+          <!-- <p>Estos son los datos de <strong>{{ hijoActivo?.nombre }}</strong></p> -->
+
+          <ion-card>
+            <ion-card-content>
+              <div class="row-between">
+                <div>
+                 
+                  <div>Nombre completo: <strong>{{ hijoActivo?.nombre }}</strong></div>
+                  <div>Edad: {{ hijoActivo?.edad }}</div>
+                  <!-- Numérico: dd-MM-aaaa -->
+                  <div>Fecha de Nacimiento: {{ hijoActivo?.fechaNac | date:'dd-MM-yyyy':'UTC' }}</div>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          </div>
+          <div class="welcome2">
+            
+            <ion-button
+              *ngIf="!soloUnHijo"
+              class="buttonLista"
+              size="small"
+              fill="clear"
+              (click)="verListaCompleta()">
+              Ver lista completa
+            </ion-button>
+
+
+          <!-- Accesos rápidos (a implementar después) -->
+          <ion-list lines="none">
+            <ion-item button (click)="irActividad(hijoActivo)">
+              <ion-label>Actividad física</ion-label>
+              <ion-note slot="end">Entrar</ion-note>
+            </ion-item>
+
+            <ion-item button (click)="irComidas(hijoActivo)">
+              <ion-label>Comidas</ion-label>
+              <ion-note slot="end">Entrar</ion-note>
+            </ion-item>
+
+            <ion-item button (click)="irMediciones(hijoActivo)">
+              <ion-label>Mediciones</ion-label>
+              <ion-note slot="end">Entrar</ion-note>
+            </ion-item>
+
+              <!-- <ion-item button (click)="irReporte(hijoActivo)">
+              <ion-label>Reporte</ion-label>
+              <ion-note slot="end">Acceso rápido</ion-note>
+            </ion-item> -->
+          </ion-list>
+       </div>
+      </ng-container>
+
+      <ng-template #sinSeleccion>
+        <div class="ion-text-center ion-padding">
+          <p>No hay hijo seleccionado.</p>
+          <ion-button *ngIf="!soloUnHijo" (click)="verListaCompleta()" size="small" fill="clear">
+            Ver lista completa
+          </ion-button>
+
+        </div>
+      </ng-template>
+    </ion-card>
+  </div> 
+  <ion-card>
+  
+    <!-- Coverflow Productos -->
+    <section class="showCoverflow" class="coverflow-wrap fade-in">
+      <div class="coverflow-header">
+        <div class="eyebrow">Grandes productos</div>
+        <h3 class="title">Ahorra en tu compra</h3>
+      </div>
+
+      <div class="coverflow-stage" >
+        <!-- Botón anterior -->
+        <button type="button" class="nav-btn prev" (click)="prevSlide()" aria-label="Anterior">‹</button>
+
+        <!-- Tarjetas -->
+        <div class="cards-layers">
+          <div
+            class="cf-card"
+            *ngFor="let p of productosCarousel; let i = index"
+            [class]=" 'cf-card ' + posClass(i) ">
+            <div class="img-box">
+              <img [src]="p.src" [alt]="p.nombre" loading="lazy" />
+            </div>
+            <div class="info">
+              <div class="badge">{{ p.badge }}</div>
+              <div class="name">{{ p.nombre }}</div>
+              <div class="cta">Ver ofertas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón siguiente -->
+        <button type="button" class="nav-btn next" (click)="nextSlide()" aria-label="Siguiente">›</button>
+
+        <!-- Decor -->
+        <div class="edge left"></div>
+        <div class="edge right"></div>
+      </div>
+    </section>
+  
+  
+</ion-card>
+
+ 
+  
+</ion-content>
+
+ 
+
+

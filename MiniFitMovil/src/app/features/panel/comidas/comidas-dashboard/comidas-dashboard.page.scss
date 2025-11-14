@@ -1,0 +1,70 @@
+.bg {
+  --background: #f8f8f8;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+
+  ion-item {
+    --background: #fff;
+    border-radius: 10px;
+  }
+
+  .filter-buttons {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    grid-column: span 2;
+  }
+}
+
+.charts-container {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+
+  .chart-box {
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    height: 260px;
+  }
+}
+
+.historial-scroll {
+  max-height: 320px;       /* ~4 filas */
+  overflow: auto;
+  padding-right: 6px;      /* que no tape el scrollbar */
+}
+
+.hist-item {
+  --min-height: 72px;      /* altura visual por fila */
+  margin: 6px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.06);
+}
+
+.titulo {
+  display: flex; gap: 6px; align-items: baseline;
+}
+.resumen {
+  color: #666;
+  font-size: 0.92rem;
+  margin-top: 2px;
+}
+
+.charts, swiper-container {
+  width: 100%;
+}
+
+.chart-wrap {
+  height: 280px;         /* dale altura explícita a los canvas */
+  position: relative;
+}
+@media (min-width: 768px) {
+  .chart-wrap { height: 320px; }
+}

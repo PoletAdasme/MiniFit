@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+     <!-- Izquierda: botón hamburguesa (se oculta solo cuando no hay menú habilitado) -->
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+
+    <ion-title>MiniFit</ion-title>
+
+    <!-- Derecha: botón Home (y opcionalmente Logout) -->
+    <ion-buttons slot="end">
+      <ion-button (click)="goHome()" fill="clear" class="home-btn" aria-label="Ir al inicio">
+        <img src="assets/img/logoCasa.png" class="home-icon" alt="Inicio" />
+      </ion-button>
+
+      <!-- Opcional: descomenta si quieres botón de salir aquí -->
+      <!--
+      <ion-button (click)="logout()" fill="clear" aria-label="Cerrar sesión">
+        <ion-icon name="log-out-outline"></ion-icon>
+      </ion-button>
+      -->
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>

@@ -1,0 +1,27 @@
+/* === Paleta MiniFit === */
+:root {
+  /* Paleta base */
+  --color-primary: #6EC8D2;
+  --color-secondary: #6EC8D2;
+  --color-background: #F8F4E6;
+  --color-text: #5F5F5F;
+  --color-button: #6EC8D2;
+  --color-button-text: #ffffff;
+
+  /* Mapea a colores Ionic (para <ion-button color="primary">, etc.) */
+  --ion-color-primary: var(--color-primary);
+  --ion-color-primary-rgb: 110, 200, 210;
+  --ion-color-primary-contrast: var(--color-button-text);
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #5fb0b9;
+  --ion-color-primary-tint: #82cfda;
+
+  --ion-background-color: var(--color-background);
+  --ion-text-color: var(--color-text);
+}
+
+/* iOS y MD por separado si quieres tonos iguales en ambos */
+.ios, .md {
+  --ion-background-color: var(--color-background);
+  --ion-text-color: var(--color-text);
+}

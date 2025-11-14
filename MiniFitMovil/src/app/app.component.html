@@ -1,0 +1,38 @@
+<ion-app>
+  <!-- Menú lateral: se renderiza sólo si menuEnabled === true -->
+  <ion-menu
+    *ngIf="menuEnabled"
+    contentId="main"
+    menuId="mainMenu"
+    side="start"
+    type="overlay">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>MiniFit</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+      <ion-list inset="true">
+        <ion-menu-toggle auto-hide="true">
+          <ion-item button (click)="goPerfil()">
+           
+            <ion-label>Perfil</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+
+    <ion-footer>
+      <ion-toolbar>
+        <ion-button expand="block" color="danger" (click)="logout()">
+        
+          Cerrar sesión
+        </ion-button>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-menu>
+
+  <!-- Contenedor principal -->
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-app>
